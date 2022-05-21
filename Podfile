@@ -10,13 +10,19 @@ def bitmovin_player
   pod 'BitmovinPlayer', '3.19.0'
 end
 
+def bitmovin_analytics
+  pod 'BitmovinAnalyticsCollector', '2.9.0'
+end
+
 target 'BasicPlayback' do
     project 'BasicPlayback/BasicPlayback.xcodeproj'
     bitmovin_player
+    bitmovin_analytics
 end
 
 target 'BasicPlaybackObjectiveC' do
     project 'BasicPlaybackObjectiveC/BasicPlaybackObjectiveC.xcodeproj'
     bitmovin_player
+    bitmovin_analytics
 end
 

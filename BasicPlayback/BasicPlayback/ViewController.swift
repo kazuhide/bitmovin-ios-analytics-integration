@@ -8,11 +8,24 @@
 
 import UIKit
 import BitmovinPlayer
+import BitmovinAnalyticsCollector
 
 final class ViewController: UIViewController {
     var player: Player!
+    var analyticsCollector: BitmovinPlayerCollector
 
+    required init?(coder aDecoder: NSCoder) {
+        // Set up Bitmovin Analytics
+        let analyticsLicenseKey = Bundle.main.object(forInfoDictionaryKey: "BitmovinAnalyticsLicenseKey") as! String
+        let analyticsConfig = BitmovinAnalyticsConfig(key: analyticsLicenseKey)
+        analyticsConfig.customerUserId = "user_1"
+        analyticsCollector = BitmovinPlayerCollector(config: analyticsConfig)
+        
+        super.init(coder: aDecoder)
+    }
+    
     deinit {
+        analyticsCollector.detachPlayer()
         player?.destroy()
     }
 
@@ -47,9 +60,19 @@ final class ViewController: UIViewController {
 
         // Create source config
         let sourceConfig = SourceConfig(url: streamUrl, type: .hls)
+        
         // Set a poster image
         sourceConfig.posterSource = posterUrl
-        player.load(sourceConfig: sourceConfig)
+        
+        // setup analytics
+        analyticsCollector.attachPlayer(player: player)
+        let source = SourceFactory.create(from: sourceConfig)
+        let metadata = SourceMetadata(videoId: "awolnation_id",
+                                      title: "awolnation",
+                                      experimentName: "ios-analytics-integration")
+        self.analyticsCollector.addSourceMetadata(playerSource: source, sourceMetadata: metadata)
+
+        player.load(source: source)
     }
 }
 
