@@ -67,8 +67,8 @@ final class ViewController: UIViewController {
         // setup analytics
         analyticsCollector.attachPlayer(player: player)
         let source = SourceFactory.create(from: sourceConfig)
-        let metadata = SourceMetadata(videoId: "awolnation_id",
-                                      title: "awolnation",
+        let metadata = SourceMetadata(videoId: "test_video_id",
+                                      title: "test_video_title",
                                       experimentName: "ios-analytics-integration")
         self.analyticsCollector.addSourceMetadata(playerSource: source, sourceMetadata: metadata)
 
