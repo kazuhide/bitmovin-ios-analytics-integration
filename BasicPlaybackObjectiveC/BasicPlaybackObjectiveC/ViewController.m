@@ -12,11 +12,14 @@
 
 @interface ViewController () <BMPPlayerListener>
 @property (nonatomic, strong) id<BMPPlayer> player;
+@property (nonatomic) BitmovinPlayerCollector *collector;
 @end
 
 @implementation ViewController
 
 - (void)dealloc {
+    // Detach Bitmovin Analytics
+    [_collector detachPlayer];
     [self.player destroy];
 }
 
@@ -54,6 +57,18 @@
 
     // Set a poster image
     [sourceConfig setPosterSource:posterUrl];
+    
+    // Set up Bitmovin Analytics
+    NSString* analyticsLisenseKey = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"BitmovinAnalyticsLicenseKey"];
+    BitmovinAnalyticsConfig *analyticsConfig = [[BitmovinAnalyticsConfig alloc] initWithKey: analyticsLisenseKey];
+    analyticsConfig.customerUserId = @"user_1";
+    analyticsConfig.videoId = @"test_video_id";
+    analyticsConfig.title = @"test_video_title";
+    analyticsConfig.experimentName = @"ios-analytics-integration";
+    _collector = [[BitmovinPlayerCollector alloc] initWithConfig: analyticsConfig];
+    
+    // Attach Bitmovin Analytics to Player
+    [_collector attachPlayerWithPlayer:self.player];
 
     [self.player loadSourceConfig:sourceConfig];
 }
