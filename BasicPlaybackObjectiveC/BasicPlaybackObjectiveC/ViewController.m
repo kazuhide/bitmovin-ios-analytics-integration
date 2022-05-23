@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import <BitmovinPlayer/BitmovinPlayer.h>
+#import <BitmovinAnalyticsCollector-Swift.h>
 
 @interface ViewController () <BMPPlayerListener>
 @property (nonatomic, strong) id<BMPPlayer> player;
