@@ -11,7 +11,7 @@ def bitmovin_player
 end
 
 def bitmovin_analytics
-  pod 'BitmovinAnalyticsCollector', '2.9.0'
+  pod 'BitmovinAnalyticsCollector', '2.9.1'
 end
 
 target 'BasicPlayback' do
